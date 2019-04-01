@@ -25,6 +25,8 @@ for (teamName of teamNames) {
 
 stats.filter(r => r.year === 'AUDL 2018').forEach(r => {
   const player = new Object(r);
+  player.defensiveEfficiency = player.pointsWonDefense / player.pointsPlayedDefense;
+  player.offensiveEfficiency = player.pointsWonOffense / player.pointsPlayedOffense;
   players.push(player);
 
   summaryPlayer.pointsPlayedDefense += player.pointsPlayedDefense;
@@ -159,6 +161,82 @@ var myChart = new Chart(teamDefensiveEfficiencyCtx, {
     title: {
       display: true,
       text: `2018 Team Defensive Efficiencies`
+    },
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true
+          }
+        }
+      ]
+    }
+  }
+});
+
+// playerDefensiveEfficiencyByTeam
+
+var playerDefensiveEfficiencyByTeamCtx = document.getElementById('playerDefensiveEfficiencyByTeam').getContext('2d');
+
+const radicalsPlayersDefensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').filter(p => p.pointsPlayedDefense >= 20).sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
+
+var myChart = new Chart(playerDefensiveEfficiencyByTeamCtx, {
+  type: 'bar',
+  data: {
+    labels: radicalsPlayersDefensiveEfficiency.map(p => p.name),
+    datasets: [
+      {
+        label: 'Defensive Efficiency',
+        data: radicalsPlayersDefensiveEfficiency.map(p => p.defensiveEfficiency),       
+        borderWidth: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    legend: { display: false },
+    title: {
+      display: true,
+      text: `2018 Radical Players Defensive Efficiencies`
+    },
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true
+          }
+        }
+      ]
+    }
+  }
+});
+
+// playerOffensiveEfficiencyByTeam
+
+var playerOffensiveEfficiencyByTeamCtx = document.getElementById('playerOffensiveEfficiencyByTeam').getContext('2d');
+
+const radicalsPlayersOffensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').filter(p => p.pointsPlayedOffense >= 20).sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
+
+var myChart = new Chart(playerOffensiveEfficiencyByTeamCtx, {
+  type: 'bar',
+  data: {
+    labels: radicalsPlayersOffensiveEfficiency.map(p => p.name),
+    datasets: [
+      {
+        label: 'Offensive Efficiency',
+        data: radicalsPlayersOffensiveEfficiency.map(p => p.offensiveEfficiency),       
+        borderWidth: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    legend: { display: false },
+    title: {
+      display: true,
+      text: `2018 Radical Players Offensive Efficiencies`
     },
     scales: {
       yAxes: [
