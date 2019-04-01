@@ -1,21 +1,8 @@
 let players = [];
 
-const summaryPlayer = {
-  pointsPlayedDefense: 0,
-  pointsLostDefense: 0,
-  pointsWonDefense: 0,
-  pointsPlayedOffense: 0,
-  pointsLostOffense: 0,
-  pointsWonOffense: 0
-};
-
-// List of accumulatableStats property names
-const accumulatableStats = ["gamesPlayed", "oppPossessionsPlayedDefense", "oppPossessionsPlayedOffense", "pointsLost", "pointsLostDefense", "pointsLostOffense", "pointsPlayed", "pointsPlayedDefense", "pointsPlayedOffense", "pointsWon", "pointsWonDefense", "pointsWonOffense", "possessionsPlayed", "possessionsPlayedDefense", "possessionsPlayedOffense", "quartersPlayed", "goals", "goalsOffense", "goalsDefense", "catches", "drops", "assists", "assistsOffense", "assistsDefense", "hockeyAssists", "hockeyAssistsOffense", "hockeyAssistsDefense", "throws", "completions", "throwaways", "throwsDropped", "throwsRecordedWithYardage", "foulsDrawn", "stalls", "blocks", "blocksOffense", "blocksDefense", "callahans", "pulls", "pullsOutofbounds", "pullsRecordedWithYardage", "pullsInboundsRecordedWithYardage", "throwingYards", "lateralThrowingYards", "forwardThrowingYards", "pullYards", "pullYardsInbounds"];
 
 // Create Team Summary Objects
 const teams = {};
-const teamNames = ["Atlanta Hustle", "Austin Sol", "Chicago Wildfire", "DC Breeze", "Dallas Roughnecks", "Detroit Mechanix", "Indianapolis AlleyCats", "Los Angeles Aviators", "Madison Radicals", "Minnesota Wind Chill", "Montreal Royal", "Nashville NightWatch", "New York Empire", "Ottawa Outlaws", "Philadelphia Phoenix", "Pittsburgh Thunderbirds", "Raleigh Flyers", "San Diego Growlers", "San Francisco FlameThrowers", "San Jose Spiders", "Seattle Cascades", "Tampa Bay Cannons", "Toronto Rush"];
-
 for (teamName of teamNames) {
   teams[teamName] = { name : teamName };
   for (accumulatableStat of accumulatableStats) {
@@ -23,7 +10,12 @@ for (teamName of teamNames) {
   }
 }
 
-stats.filter(r => r.year === 'AUDL 2018').forEach(r => {
+const summaryPlayer = {};
+for (accumulatableStat of accumulatableStats) {
+  summaryPlayer[accumulatableStat] = 0;
+}
+
+individualStats.filter(r => r.year === 'AUDL 2018').forEach(r => {
   const player = new Object(r);
   player.defensiveEfficiency = player.pointsWonDefense / player.pointsPlayedDefense;
   player.offensiveEfficiency = player.pointsWonOffense / player.pointsPlayedOffense;
@@ -83,7 +75,7 @@ var myChart = new Chart(gamesPlayedCtx, {
   }
 });
 
-// Team Offensive Efficieny Bar Chart
+// Generate Calculated Team Statistics
 let teamsArray = [];
 for (teamName of teamNames) {
   teams[teamName].offensiveEfficiency = teams[teamName].pointsWonOffense / teams[teamName].pointsPlayedOffense;
