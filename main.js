@@ -108,10 +108,22 @@ const radicalsPlayersOffensiveEfficiency = players.filter(p => p.teamName === 'M
 
 generateBarGraph('playerOffensiveEfficiencyByTeam', radicalsPlayersOffensiveEfficiency, 'Offensive Efficiency', 'name', 'offensiveEfficiency', `2018 Radical Players Offensive Efficiencies`);
 
-// GENERATE BAR GRAPH
+function hsl_col_perc(percent) {
+  const a = percent / 100,
+    b = (120 - 0) * a,
+    c = b + 0;
 
+  // Return a CSS HSL string
+  return 'hsl(' + c + ', 100%, 50%)';
+}
+
+// GENERATE BAR GRAPH
 function generateBarGraph(canvasName, sortedData, labelText, labelName, statName, title) {
   var ctx = document.getElementById(canvasName).getContext('2d');
+
+  const minValue = sortedData[0][statName];
+  const maxValue = sortedData[sortedData.length - 1][statName];
+  const range = maxValue - minValue;
 
   var myChart = new Chart(ctx, {
     type: 'bar',
@@ -120,7 +132,8 @@ function generateBarGraph(canvasName, sortedData, labelText, labelName, statName
       datasets: [
         {
           label: labelText,
-          data: sortedData.map(p => p[statName]),       
+          data: sortedData.map(p => p[statName]),
+          backgroundColor: sortedData.map(p => hsl_col_perc((p[statName] - minValue) * (100 / range))),
           borderWidth: 1
         }
       ]
