@@ -99,14 +99,29 @@ generateBarGraph('teamDefensiveEfficiency', teamsArray, 'Defensive Efficiency', 
 
 const radicalsPlayersDefensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').filter(p => p.pointsPlayedDefense >= 20).sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
 
-generateBarGraph('playerDefensiveEfficiencyByTeam', radicalsPlayersDefensiveEfficiency, 'Defensive Efficiency', 'name', 'defensiveEfficiency', `2018 Radical Players Defensive Efficiencies`);
+let teamPlayersDefensiveEfficiencyChart = generateBarGraph('playerDefensiveEfficiencyByTeam', radicalsPlayersDefensiveEfficiency, 'Defensive Efficiency', 'name', 'defensiveEfficiency', `2018 Radical Players Defensive Efficiencies`);
+
+function generatePlayerDefensiveEfficienciesForTeam(selectedTeamName) {
+  teamPlayersDefensiveEfficiencyChart.destroy();
+
+  const teamPlayersDefensiveEfficiency = players.filter(p => p.teamName === selectedTeamName).filter(p => p.pointsPlayedDefense >= 20).sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
+  
+  teamPlayersDefensiveEfficiencyChart = generateBarGraph('playerDefensiveEfficiencyByTeam', teamPlayersDefensiveEfficiency, 'Defensive Efficiency', 'name', 'defensiveEfficiency', `2018 ${selectedTeamName} Players Defensive Efficiencies`);
+}
 
 
 // playerOffensiveEfficiencyByTeam
 
 const radicalsPlayersOffensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').filter(p => p.pointsPlayedOffense >= 20).sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
 
-generateBarGraph('playerOffensiveEfficiencyByTeam', radicalsPlayersOffensiveEfficiency, 'Offensive Efficiency', 'name', 'offensiveEfficiency', `2018 Radical Players Offensive Efficiencies`);
+let teamPlayersOffensiveEfficiencyChart =  generateBarGraph('playerOffensiveEfficiencyByTeam', radicalsPlayersOffensiveEfficiency, 'Offensive Efficiency', 'name', 'offensiveEfficiency', `2018 Radical Players Offensive Efficiencies`);
+
+function generatePlayerOffensiveEfficienciesForTeam(selectedTeamName) {
+  teamPlayersOffensiveEfficiencyChart.destroy();
+  const teamPlayersOffensiveEfficiency = players.filter(p => p.teamName === selectedTeamName).filter(p => p.pointsPlayedOffense >= 20).sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
+  
+  teamPlayersOffensiveEfficiencyChart = generateBarGraph('playerOffensiveEfficiencyByTeam', teamPlayersOffensiveEfficiency, 'Offensive Efficiency', 'name', 'offensiveEfficiency', `2018 ${selectedTeamName} Players Offensive Efficiencies`);
+}
 
 function hsl_col_perc(percent) {
   const a = percent / 100,
@@ -121,11 +136,15 @@ function hsl_col_perc(percent) {
 function generateBarGraph(canvasName, sortedData, labelText, labelName, statName, title) {
   var ctx = document.getElementById(canvasName).getContext('2d');
 
-  const minValue = sortedData[0][statName];
-  const maxValue = sortedData[sortedData.length - 1][statName];
+  let minValue = 0;
+  let maxValue = 1;
+  if (sortedData.length > 0){
+    minValue = sortedData[0][statName];
+    maxValue = sortedData[sortedData.length - 1][statName];
+  }
   const range = maxValue - minValue;
 
-  var myChart = new Chart(ctx, {
+  var chart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: sortedData.map(p => p[labelName]),
@@ -157,4 +176,5 @@ function generateBarGraph(canvasName, sortedData, labelText, labelName, statName
       }
     }
   });
+  return chart;
 }
