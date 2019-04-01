@@ -1,0 +1,23 @@
+{
+  "name": "acary-audl-stats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "chart.js": "^2.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Afbcary/audl-stats.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Afbcary/audl-stats/issues"
+  },
+  "homepage": "https://github.com/Afbcary/audl-stats#readme"
+}
