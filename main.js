@@ -29,20 +29,11 @@ stats.filter(r => r.year === 'AUDL 2018').forEach(r => {
   player.offensiveEfficiency = player.pointsWonOffense / player.pointsPlayedOffense;
   players.push(player);
 
-  summaryPlayer.pointsPlayedDefense += player.pointsPlayedDefense;
-  summaryPlayer.pointsLostDefense += player.pointsLostDefense;
-  summaryPlayer.pointsWonDefense += player.pointsWonDefense;
-
-  summaryPlayer.pointsPlayedOffense += player.pointsPlayedOffense;
-  summaryPlayer.pointsLostOffense += player.pointsLostOffense;
-  summaryPlayer.pointsWonOffense += player.pointsWonOffense;
-
   for (accumulatableStat of accumulatableStats) {
+    summaryPlayer[accumulatableStat] += player[accumulatableStat];
     teams[player.teamName][accumulatableStat] += player[accumulatableStat];
   }
 });
-
-console.log(teams);
 
 players = players.sort((p1, p2) => (p1.pointsPlayed > p2.pointsPlayed)? 1 : -1);
 
@@ -100,152 +91,65 @@ for (teamName of teamNames) {
   teamsArray.push(teams[teamName]);
 }
 
+// Team Offensive Efficiencies
+
 teamsArray = teamsArray.sort((t1, t2) => (t1.offensiveEfficiency > t2.offensiveEfficiency)? 1 : -1);
 
+generateBarGraph('teamOffensiveEfficiency', teamsArray, 'Offensive Efficiency', 'name', 'offensiveEfficiency', `2018 Team Offensive Efficiencies`);
 
-var teamOffensiveEfficiencyCtx = document.getElementById('teamOffensiveEfficiency').getContext('2d');
-
-var myChart = new Chart(teamOffensiveEfficiencyCtx, {
-  type: 'bar',
-  data: {
-    labels: teamsArray.map(t => t.name),
-    datasets: [
-      {
-        label: 'Offensive Efficiency',
-        data: teamsArray.map(t => t.offensiveEfficiency),       
-        borderWidth: 1
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    legend: { display: false },
-    title: {
-      display: true,
-      text: `2018 Team Offensive Efficiencies`
-    },
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true
-          }
-        }
-      ]
-    }
-  }
-});
+// Team Defensive Efficiencies
 
 teamsArray = teamsArray.sort((t1, t2) => (t1.defensiveEfficiency > t2.defensiveEfficiency)? 1 : -1);
 
-
-var teamDefensiveEfficiencyCtx = document.getElementById('teamDefensiveEfficiency').getContext('2d');
-
-var myChart = new Chart(teamDefensiveEfficiencyCtx, {
-  type: 'bar',
-  data: {
-    labels: teamsArray.map(t => t.name),
-    datasets: [
-      {
-        label: 'Defensive Efficiency',
-        data: teamsArray.map(t => t.defensiveEfficiency),       
-        borderWidth: 1
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    legend: { display: false },
-    title: {
-      display: true,
-      text: `2018 Team Defensive Efficiencies`
-    },
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true
-          }
-        }
-      ]
-    }
-  }
-});
+generateBarGraph('teamDefensiveEfficiency', teamsArray, 'Defensive Efficiency', 'name', 'defensiveEfficiency', `2018 Team Defensive Efficiencies`);
 
 // playerDefensiveEfficiencyByTeam
 
-var playerDefensiveEfficiencyByTeamCtx = document.getElementById('playerDefensiveEfficiencyByTeam').getContext('2d');
-
 const radicalsPlayersDefensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').filter(p => p.pointsPlayedDefense >= 20).sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
 
-var myChart = new Chart(playerDefensiveEfficiencyByTeamCtx, {
-  type: 'bar',
-  data: {
-    labels: radicalsPlayersDefensiveEfficiency.map(p => p.name),
-    datasets: [
-      {
-        label: 'Defensive Efficiency',
-        data: radicalsPlayersDefensiveEfficiency.map(p => p.defensiveEfficiency),       
-        borderWidth: 1
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    legend: { display: false },
-    title: {
-      display: true,
-      text: `2018 Radical Players Defensive Efficiencies`
-    },
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true
-          }
-        }
-      ]
-    }
-  }
-});
+generateBarGraph('playerDefensiveEfficiencyByTeam', radicalsPlayersDefensiveEfficiency, 'Defensive Efficiency', 'name', 'defensiveEfficiency', `2018 Radical Players Defensive Efficiencies`);
+
 
 // playerOffensiveEfficiencyByTeam
 
-var playerOffensiveEfficiencyByTeamCtx = document.getElementById('playerOffensiveEfficiencyByTeam').getContext('2d');
-
 const radicalsPlayersOffensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').filter(p => p.pointsPlayedOffense >= 20).sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
 
-var myChart = new Chart(playerOffensiveEfficiencyByTeamCtx, {
-  type: 'bar',
-  data: {
-    labels: radicalsPlayersOffensiveEfficiency.map(p => p.name),
-    datasets: [
-      {
-        label: 'Offensive Efficiency',
-        data: radicalsPlayersOffensiveEfficiency.map(p => p.offensiveEfficiency),       
-        borderWidth: 1
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    legend: { display: false },
-    title: {
-      display: true,
-      text: `2018 Radical Players Offensive Efficiencies`
-    },
-    scales: {
-      yAxes: [
+generateBarGraph('playerOffensiveEfficiencyByTeam', radicalsPlayersOffensiveEfficiency, 'Offensive Efficiency', 'name', 'offensiveEfficiency', `2018 Radical Players Offensive Efficiencies`);
+
+// GENERATE BAR GRAPH
+
+function generateBarGraph(canvasName, sortedData, labelText, labelName, statName, title) {
+  var ctx = document.getElementById(canvasName).getContext('2d');
+
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sortedData.map(p => p[labelName]),
+      datasets: [
         {
-          ticks: {
-            beginAtZero: true
-          }
+          label: labelText,
+          data: sortedData.map(p => p[statName]),       
+          borderWidth: 1
         }
       ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      legend: { display: false },
+      title: {
+        display: true,
+        text: title
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      }
     }
-  }
-});
+  });
+}
