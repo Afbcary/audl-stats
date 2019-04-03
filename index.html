@@ -46,7 +46,7 @@
       <option value="Toronto Rush">Toronto Rush</option>
   </select>
   <label>Select a Team</label>
-  <canvas id="playerOffensiveEfficiencyByTeam"></canvas>
+  <canvas id="playerOffensiveEfficiencyAndPointsPlayedByTeam"></canvas>
 
   <select onchange="generatePlayerDefensiveEfficienciesForTeam(this.value)">
       <option value="" disabled selected></option>
@@ -75,7 +75,7 @@
       <option value="Toronto Rush">Toronto Rush</option>
   </select>
   <label>Select a Team</label>
-  <canvas id="playerDefensiveEfficiencyByTeam"></canvas>
+  <canvas id="playerDefensiveEfficiencyAndPointsPlayedByTeam"></canvas>
 
   <script type="text/javascript" src="IndividualStats.js"></script>
   <script type="text/javascript" src="AccumulatableStats.js"></script>
@@ -83,6 +83,7 @@
   <script type="text/javascript" src="TeamNames.js"></script>
   <script src="./node_modules/@material/select/dist/mdc.select.min.js"></script>
   <script src="./node_modules/chart.js/dist/Chart.min.js"></script>
+  <!-- <script src="./node_modules/statkit/statkit.js"></script> -->
   <script src="main.js" type="text/javascript"></script>
 </body>
 </html>

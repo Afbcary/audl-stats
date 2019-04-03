@@ -1,5 +1,7 @@
 let players = [];
+// var sk = require("statkit");
 
+// console.log(sk.gmean(1,2,3));
 
 // Create Team Summary Objects
 const teams = {};
@@ -97,30 +99,30 @@ generateBarGraph('teamDefensiveEfficiency', teamsArray, 'Defensive Efficiency', 
 
 // playerDefensiveEfficiencyByTeam
 
-const radicalsPlayersDefensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').filter(p => p.pointsPlayedDefense >= 20).sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
+const teamPlayersDefensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
 
-let teamPlayersDefensiveEfficiencyChart = generateBarGraph('playerDefensiveEfficiencyByTeam', radicalsPlayersDefensiveEfficiency, 'Defensive Efficiency', 'name', 'defensiveEfficiency', `2018 Radical Players Defensive Efficiencies`);
+let teamPlayersDefensiveEfficiencyChart = generateScatterChart('playerDefensiveEfficiencyAndPointsPlayedByTeam', '2018 Radicals Defensive Efficiency and Points Played', teamPlayersDefensiveEfficiency, 'pointsPlayedDefense', 'defensiveEfficiency');
 
 function generatePlayerDefensiveEfficienciesForTeam(selectedTeamName) {
   teamPlayersDefensiveEfficiencyChart.destroy();
 
-  const teamPlayersDefensiveEfficiency = players.filter(p => p.teamName === selectedTeamName).filter(p => p.pointsPlayedDefense >= 20).sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
+  const teamPlayersDefensiveEfficiency = players.filter(p => p.teamName === selectedTeamName).sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
   
-  teamPlayersDefensiveEfficiencyChart = generateBarGraph('playerDefensiveEfficiencyByTeam', teamPlayersDefensiveEfficiency, 'Defensive Efficiency', 'name', 'defensiveEfficiency', `2018 ${selectedTeamName} Players Defensive Efficiencies`);
+  teamPlayersDefensiveEfficiencyChart = generateScatterChart('playerDefensiveEfficiencyAndPointsPlayedByTeam', `2018 ${selectedTeamName} Defensive Efficiency and Points Played`, teamPlayersDefensiveEfficiency, 'pointsPlayedDefense', 'defensiveEfficiency');
 }
 
 
 // playerOffensiveEfficiencyByTeam
 
-const radicalsPlayersOffensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').filter(p => p.pointsPlayedOffense >= 20).sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
+const teamPlayersOffensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
 
-let teamPlayersOffensiveEfficiencyChart =  generateBarGraph('playerOffensiveEfficiencyByTeam', radicalsPlayersOffensiveEfficiency, 'Offensive Efficiency', 'name', 'offensiveEfficiency', `2018 Radical Players Offensive Efficiencies`);
+let teamPlayersOffensiveEfficiencyChart = generateScatterChart('playerOffensiveEfficiencyAndPointsPlayedByTeam', '2018 Radicals Offensive Efficiency and Points Played', teamPlayersOffensiveEfficiency, 'pointsPlayedOffense', 'offensiveEfficiency');
 
 function generatePlayerOffensiveEfficienciesForTeam(selectedTeamName) {
   teamPlayersOffensiveEfficiencyChart.destroy();
-  const teamPlayersOffensiveEfficiency = players.filter(p => p.teamName === selectedTeamName).filter(p => p.pointsPlayedOffense >= 20).sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
+  const teamPlayersOffensiveEfficiency = players.filter(p => p.teamName === selectedTeamName).sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
   
-  teamPlayersOffensiveEfficiencyChart = generateBarGraph('playerOffensiveEfficiencyByTeam', teamPlayersOffensiveEfficiency, 'Offensive Efficiency', 'name', 'offensiveEfficiency', `2018 ${selectedTeamName} Players Offensive Efficiencies`);
+  teamPlayersOffensiveEfficiencyChart = generateScatterChart('playerOffensiveEfficiencyAndPointsPlayedByTeam', `2018 ${selectedTeamName} Offensive Efficiency and Points Played`, teamPlayersOffensiveEfficiency, 'pointsPlayedOffense', 'offensiveEfficiency');
 }
 
 function hsl_col_perc(percent) {
@@ -177,4 +179,45 @@ function generateBarGraph(canvasName, sortedData, labelText, labelName, statName
     }
   });
   return chart;
+}
+
+function createScatterPoint(datum, xStat, yStat) {
+  return { x: datum[xStat], y: datum[yStat]};
+}
+
+function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
+  var ctx = document.getElementById(canvasName).getContext('2d');
+
+  const scatterData = unorderedData.map(p => createScatterPoint(p, xStat, yStat));
+
+  
+  var scatterChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      labels: unorderedData.map(p => p.name),
+        datasets: [{
+            label: title,
+            data: scatterData,
+            backgroundColor: 'hsl(244, 100%, 50%)',
+            pointRadius: 5
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom'
+            }]
+        },
+        tooltips: {
+          callbacks: {
+             label: function(tooltipItem, data) {
+                var label = data.labels[tooltipItem.index];
+                return label + ': (' + tooltipItem.xLabel + ', ' + tooltipItem.yLabel + ')';
+             }
+          }
+       }
+    }
+  });
+  return scatterChart;
 }

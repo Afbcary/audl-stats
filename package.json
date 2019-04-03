@@ -5,7 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "@material/select": "^1.1.0",
-    "chart.js": "^2.8.0"
+    "chart.js": "^2.8.0",
+    "statkit": "^0.2.0"
   },
   "devDependencies": {},
   "scripts": {
