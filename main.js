@@ -3,9 +3,19 @@ let players = [];
 
 // console.log(sk.gmean(1,2,3));
 
+// Add team options to select 
+const teamSelect = document.getElementById('teamSelect');
+
+
 // Create Team Summary Objects
 const teams = {};
 for (teamName of teamNames) {
+
+  const option = document.createElement('option');
+  option.value = teamName;
+  option.innerHTML = teamName;
+  teamSelect.appendChild(option);
+
   teams[teamName] = { name : teamName };
   for (accumulatableStat of accumulatableStats) {
     teams[teamName][accumulatableStat] = 0;
@@ -123,6 +133,11 @@ function generatePlayerOffensiveEfficienciesForTeam(selectedTeamName) {
   const teamPlayersOffensiveEfficiency = players.filter(p => p.teamName === selectedTeamName).sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
   
   teamPlayersOffensiveEfficiencyChart = generateScatterChart('playerOffensiveEfficiencyAndPointsPlayedByTeam', `2018 ${selectedTeamName} Offensive Efficiency and Points Played`, teamPlayersOffensiveEfficiency, 'pointsPlayedOffense', 'offensiveEfficiency');
+}
+
+function generateBothEfficienciesForTeam(selectedTeamName) {
+  generatePlayerOffensiveEfficienciesForTeam(selectedTeamName);
+  generatePlayerDefensiveEfficienciesForTeam(selectedTeamName);
 }
 
 function hsl_col_perc(percent) {

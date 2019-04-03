@@ -1,89 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
 
-  <title>AUDL Stats</title>
-  <meta name="description" content="audl stats">
-  <meta name="author" content="acary">
-  <link rel="stylesheet" type="text/css" href="audl.css">
+    <title>AUDL Stats</title>
+    <meta name="description" content="audl stats" />
+    <meta name="author" content="acary" />
+    <link rel="stylesheet" type="text/css" href="audl.css" />
+  </head>
 
-</head>
+  <body>
+    <div id="offenseWon"></div>
+    <div id="defenseLost"></div>
+    <br />
+    <div id="offenseLost"></div>
+    <div id="defenseWon"></div>
+    <canvas id="gamesPlayedCanvas"></canvas>
+    <canvas id="teamOffensiveEfficiency"></canvas>
+    <canvas id="teamDefensiveEfficiency"></canvas>
+    
+    <select id="teamSelect" onchange="generateBothEfficienciesForTeam(this.value)">
+    </select>
+    <label>Select a Team</label>
+    <canvas id="playerOffensiveEfficiencyAndPointsPlayedByTeam"></canvas>
+    <canvas id="playerDefensiveEfficiencyAndPointsPlayedByTeam"></canvas>
 
-<body>
-  <div id="offenseWon"></div>
-  <div id="defenseLost"></div>
-  <br>
-  <div id="offenseLost"></div>
-  <div id="defenseWon"></div>
-  <canvas id="gamesPlayedCanvas"></canvas>
-  <canvas id="teamOffensiveEfficiency"></canvas>
-  <canvas id="teamDefensiveEfficiency"></canvas>
-  <select onchange="generatePlayerOffensiveEfficienciesForTeam(this.value)">
-      <option value="" disabled selected></option>
-      <option value="Atlanta Hustle">Atlanta Hustle</option>
-      <option value="Austin Sol">Austin Sol</option>
-      <option value="Chicago Wildfire">Chicago Wildfire</option>
-      <option value="DC Breeze">DC Breeze</option>
-      <option value="Dallas Roughnecks">Dallas Roughnecks</option>
-      <option value="Detroit Mechanix">Detroit Mechanix</option>
-      <option value="Indianapolis AlleyCats">Indianapolis AlleyCats</option>
-      <option value="Los Angeles Aviators">Los Angeles Aviators</option>
-      <option value="Madison Radicals">Madison Radicals</option>
-      <option value="Minnesota Wind Chill">Minnesota Wind Chill</option>
-      <option value="Montreal Royal">Montreal Royal</option>
-      <option value="Nashville NightWatch">Nashville NightWatch</option>
-      <option value="New York Empire">New York Empire</option>
-      <option value="Ottawa Outlaws">Ottawa Outlaws</option>
-      <option value="Philadelphia Phoenix">Philadelphia Phoenix</option>
-      <option value="Pittsburgh Thunderbirds">Pittsburgh Thunderbirds</option>
-      <option value="Raleigh Flyers">Raleigh Flyers</option>
-      <option value="San Diego Growlers">San Diego Growlers</option>
-      <option value="San Francisco FlameThrowers">San Francisco FlameThrowers</option>
-      <option value="San Jose Spiders">San Jose Spiders</option>
-      <option value="Seattle Cascades">Seattle Cascades</option>
-      <option value="Tampa Bay Cannons">Tampa Bay Cannons</option>
-      <option value="Toronto Rush">Toronto Rush</option>
-  </select>
-  <label>Select a Team</label>
-  <canvas id="playerOffensiveEfficiencyAndPointsPlayedByTeam"></canvas>
-
-  <select onchange="generatePlayerDefensiveEfficienciesForTeam(this.value)">
-      <option value="" disabled selected></option>
-      <option value="Atlanta Hustle">Atlanta Hustle</option>
-      <option value="Austin Sol">Austin Sol</option>
-      <option value="Chicago Wildfire">Chicago Wildfire</option>
-      <option value="DC Breeze">DC Breeze</option>
-      <option value="Dallas Roughnecks">Dallas Roughnecks</option>
-      <option value="Detroit Mechanix">Detroit Mechanix</option>
-      <option value="Indianapolis AlleyCats">Indianapolis AlleyCats</option>
-      <option value="Los Angeles Aviators">Los Angeles Aviators</option>
-      <option value="Madison Radicals">Madison Radicals</option>
-      <option value="Minnesota Wind Chill">Minnesota Wind Chill</option>
-      <option value="Montreal Royal">Montreal Royal</option>
-      <option value="Nashville NightWatch">Nashville NightWatch</option>
-      <option value="New York Empire">New York Empire</option>
-      <option value="Ottawa Outlaws">Ottawa Outlaws</option>
-      <option value="Philadelphia Phoenix">Philadelphia Phoenix</option>
-      <option value="Pittsburgh Thunderbirds">Pittsburgh Thunderbirds</option>
-      <option value="Raleigh Flyers">Raleigh Flyers</option>
-      <option value="San Diego Growlers">San Diego Growlers</option>
-      <option value="San Francisco FlameThrowers">San Francisco FlameThrowers</option>
-      <option value="San Jose Spiders">San Jose Spiders</option>
-      <option value="Seattle Cascades">Seattle Cascades</option>
-      <option value="Tampa Bay Cannons">Tampa Bay Cannons</option>
-      <option value="Toronto Rush">Toronto Rush</option>
-  </select>
-  <label>Select a Team</label>
-  <canvas id="playerDefensiveEfficiencyAndPointsPlayedByTeam"></canvas>
-
-  <script type="text/javascript" src="IndividualStats.js"></script>
-  <script type="text/javascript" src="AccumulatableStats.js"></script>
-  <script type="text/javascript" src="RecievedCalculatedStats.js"></script>
-  <script type="text/javascript" src="TeamNames.js"></script>
-  <script src="./node_modules/@material/select/dist/mdc.select.min.js"></script>
-  <script src="./node_modules/chart.js/dist/Chart.min.js"></script>
-  <!-- <script src="./node_modules/statkit/statkit.js"></script> -->
-  <script src="main.js" type="text/javascript"></script>
-</body>
+    <script type="text/javascript" src="IndividualStats.js"></script>
+    <script type="text/javascript" src="AccumulatableStats.js"></script>
+    <script type="text/javascript" src="RecievedCalculatedStats.js"></script>
+    <script type="text/javascript" src="TeamNames.js"></script>
+    <script src="./node_modules/@material/select/dist/mdc.select.min.js"></script>
+    <script src="./node_modules/chart.js/dist/Chart.min.js"></script>
+    <!-- <script src="./node_modules/statkit/statkit.js"></script> -->
+    <script src="main.js" type="text/javascript"></script>
+  </body>
 </html>
