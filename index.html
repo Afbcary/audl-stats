@@ -15,14 +15,21 @@
     <br />
     <div id="offenseLost"></div>
     <div id="defenseWon"></div>
-    <canvas id="teamOffensiveEfficiency"></canvas>
-    <canvas id="teamDefensiveEfficiency"></canvas>
-    
-    <select id="teamSelect" onchange="generateForTeam(this.value)">
-    </select>
+    <div class="chart-container">
+      <canvas id="teamOffensiveEfficiency"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="teamDefensiveEfficiency"></canvas>
+    </div>
+
+    <select id="teamSelect" onchange="generateForTeam(this.value)"> </select>
     <label>Select a Team</label>
-    <canvas id="playerOffensiveEfficiencyAndPointsPlayedByTeam"></canvas>
-    <canvas id="playerDefensiveEfficiencyAndPointsPlayedByTeam"></canvas>
+    <div class="chart-container">
+      <canvas id="playerOffensiveEfficiencyAndPointsPlayedByTeam"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="playerDefensiveEfficiencyAndPointsPlayedByTeam"></canvas>
+    </div>
 
     <script type="text/javascript" src="IndividualStats.js"></script>
     <script type="text/javascript" src="AccumulatableStats.js"></script>
