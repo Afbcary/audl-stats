@@ -1,20 +1,22 @@
 let players = [];
 
-var sk = require("./node_modules/statkit/statkit.js");
+module.exports = generateForTeam;
 
-// Anscombe's quartet
-var x = [10, 8, 13, 9, 11, 14, 6, 4, 12, 7, 5];
-var y = [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68];
+// var sk = require("./node_modules/statkit/statkit.js");
 
-var A = new Array(x.length*2);
-for (var i = 0; i < x.length; ++i) {
-  A[2*i] = 1;
-  A[2*i + 1] = x[i];
-}
+// // Anscombe's quartet
+// var x = [10, 8, 13, 9, 11, 14, 6, 4, 12, 7, 5];
+// var y = [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68];
 
-var b = sk.lstsq(x.length, 2, A, y);
+// var A = new Array(x.length*2);
+// for (var i = 0; i < x.length; ++i) {
+//   A[2*i] = 1;
+//   A[2*i + 1] = x[i];
+// }
 
-console.log("intercept =", b[0], "slope =", b[1]);
+// var b = sk.lstsq(x.length, 2, A, y);
+
+// console.log("intercept =", b[0], "slope =", b[1]);
 
 // Add team options to select 
 const teamSelect = document.getElementById('teamSelect');
@@ -60,46 +62,6 @@ players = players.sort((p1, p2) => (p1.pointsPlayed > p2.pointsPlayed)? 1 : -1);
   document.getElementById('offenseWon').innerText = `Players won ${summaryPlayer.pointsWonOffense/summaryPlayer.pointsPlayedOffense}% of the games they played on offense.`;
   document.getElementById('offenseLost').innerText = `Players lost ${summaryPlayer.pointsLostOffense/summaryPlayer.pointsPlayedOffense}% of the games they played on offense.`;
 
-// Games Played Bar Chart
-var gamesPlayedCtx = document.getElementById('gamesPlayedCanvas').getContext('2d');
-
-var myChart = new Chart(gamesPlayedCtx, {
-  type: 'bar',
-  data: {
-    labels: players.map(p => p.name),
-    datasets: [
-      {
-        label: 'Points Played',
-        data: players.map(p => p.pointsPlayed),       
-        borderWidth: 1
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    legend: { display: false },
-    title: {
-      display: true,
-      text: `Games Played`
-    },
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true
-          }
-        }
-      ],
-      xAxes: [
-        {
-          display: false //this will remove all the x-axis grid lines
-        }
-      ]
-    }
-  }
-});
-
 // Generate Calculated Team Statistics
 let teamsArray = [];
 for (teamName of teamNames) {
@@ -120,14 +82,17 @@ teamsArray = teamsArray.sort((t1, t2) => (t1.defensiveEfficiency > t2.defensiveE
 
 generateBarGraph('teamDefensiveEfficiency', teamsArray, 'Defensive Efficiency', 'name', 'defensiveEfficiency', `2018 Team Defensive Efficiencies`);
 
+let teamPlayersOffensiveEfficiencyChart;
+let teamPlayersDefensiveEfficiencyChart;
+// teamPlayersOffensiveEfficiencyChart = generatePlayerOffensiveEfficienciesForTeam('Madison Radicals');
+// teamPlayersDefensiveEfficiencyChart = generatePlayerDefensiveEfficienciesForTeam('Madison Radicals');
+
 // playerDefensiveEfficiencyByTeam
-
-const teamPlayersDefensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
-
-let teamPlayersDefensiveEfficiencyChart = generateScatterChart('playerDefensiveEfficiencyAndPointsPlayedByTeam', '2018 Radicals Defensive Efficiency and Points Played', teamPlayersDefensiveEfficiency, 'pointsPlayedDefense', 'defensiveEfficiency');
-
 function generatePlayerDefensiveEfficienciesForTeam(selectedTeamName) {
-  teamPlayersDefensiveEfficiencyChart.destroy();
+  console.log(teamPlayersDefensiveEfficiencyChart);
+  if (teamPlayersDefensiveEfficiencyChart) {
+    teamPlayersDefensiveEfficiencyChart.destroy();
+  }
 
   const teamPlayersDefensiveEfficiency = players.filter(p => p.teamName === selectedTeamName).sort((p1, p2) => (p1.defensiveEfficiency > p2.defensiveEfficiency)? 1 : -1);
   
@@ -136,30 +101,32 @@ function generatePlayerDefensiveEfficienciesForTeam(selectedTeamName) {
 
 
 // playerOffensiveEfficiencyByTeam
-
-const teamPlayersOffensiveEfficiency = players.filter(p => p.teamName === 'Madison Radicals').sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
-
-let teamPlayersOffensiveEfficiencyChart = generateScatterChart('playerOffensiveEfficiencyAndPointsPlayedByTeam', '2018 Radicals Offensive Efficiency and Points Played', teamPlayersOffensiveEfficiency, 'pointsPlayedOffense', 'offensiveEfficiency');
-
 function generatePlayerOffensiveEfficienciesForTeam(selectedTeamName) {
-  teamPlayersOffensiveEfficiencyChart.destroy();
+  console.log(teamPlayersOffensiveEfficiencyChart);
+  if (teamPlayersOffensiveEfficiencyChart) {
+    teamPlayersOffensiveEfficiencyChart.destroy();
+  }
   const teamPlayersOffensiveEfficiency = players.filter(p => p.teamName === selectedTeamName).sort((p1, p2) => (p1.offensiveEfficiency > p2.offensiveEfficiency)? 1 : -1);
   
   teamPlayersOffensiveEfficiencyChart = generateScatterChart('playerOffensiveEfficiencyAndPointsPlayedByTeam', `2018 ${selectedTeamName} Offensive Efficiency and Points Played`, teamPlayersOffensiveEfficiency, 'pointsPlayedOffense', 'offensiveEfficiency');
 }
 
-function generateBothEfficienciesForTeam(selectedTeamName) {
+function generateForTeam(selectedTeamName) {
   generatePlayerOffensiveEfficienciesForTeam(selectedTeamName);
   generatePlayerDefensiveEfficienciesForTeam(selectedTeamName);
 }
 
-function hsl_col_perc(percent) {
-  const a = percent / 100,
-    b = (120 - 0) * a,
-    c = b + 0;
-
-  // Return a CSS HSL string
-  return 'hsl(' + c + ', 100%, 50%)';
+function hsl_col_perc(value, min, max) {
+  // colors 70 -> 20 
+  //       (30 -> 80)
+  //        min-> max
+  // example 5 ,1, 10
+  const range = max - min; // 9
+  const place = value - min; // 4
+  const percent = place / range;
+  const colorPercent = 70 - (percent * 100) / 2;
+  console.log(colorPercent);
+  return `hsl(243, 100%, ${colorPercent}%)`;
 }
 
 // GENERATE BAR GRAPH
@@ -172,7 +139,6 @@ function generateBarGraph(canvasName, sortedData, labelText, labelName, statName
     minValue = sortedData[0][statName];
     maxValue = sortedData[sortedData.length - 1][statName];
   }
-  const range = maxValue - minValue;
 
   var chart = new Chart(ctx, {
     type: 'bar',
@@ -182,7 +148,7 @@ function generateBarGraph(canvasName, sortedData, labelText, labelName, statName
         {
           label: labelText,
           data: sortedData.map(p => p[statName]),
-          backgroundColor: sortedData.map(p => hsl_col_perc((p[statName] - minValue) * (100 / range))),
+          backgroundColor: sortedData.map(p => hsl_col_perc(p[statName], minValue, maxValue)),
           borderWidth: 1
         }
       ]
@@ -234,8 +200,15 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
         scales: {
             xAxes: [{
                 type: 'linear',
-                position: 'bottom'
-            }]
+                position: 'bottom',
+                min: 0
+            }],
+            yAxes: [{
+              ticks: {
+                suggestedMin: 0,
+                suggestedMax: 1
+            }
+          }]
         },
         tooltips: {
           callbacks: {

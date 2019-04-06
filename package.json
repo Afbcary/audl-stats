@@ -12,7 +12,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "./node_modules/.bin/browserify main.js -o bundle.js"
+    "bundle": "./node_modules/.bin/browserify main.js --standalone generateForTeam > bundle.js"
   },
   "repository": {
     "type": "git",

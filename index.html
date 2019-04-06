@@ -15,11 +15,10 @@
     <br />
     <div id="offenseLost"></div>
     <div id="defenseWon"></div>
-    <canvas id="gamesPlayedCanvas"></canvas>
     <canvas id="teamOffensiveEfficiency"></canvas>
     <canvas id="teamDefensiveEfficiency"></canvas>
     
-    <select id="teamSelect" onchange="generateBothEfficienciesForTeam(this.value)">
+    <select id="teamSelect" onchange="generateForTeam(this.value)">
     </select>
     <label>Select a Team</label>
     <canvas id="playerOffensiveEfficiencyAndPointsPlayedByTeam"></canvas>
