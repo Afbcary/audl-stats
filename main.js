@@ -1,5 +1,11 @@
 var sk = require('./node_modules/statkit/statkit.js');
 
+// TODO: 
+// draw linear reg lines to max x value
+// title team bar graphs
+// calculate team linear regressions
+// calculate player standard deviations
+// graph best player standard deviations on O and D
 module.exports = generateForTeam;
 
 // Add team options to select
@@ -52,22 +58,15 @@ players = players.sort((p1, p2) =>
 );
 
 document.getElementById(
-  'defenseWon'
-).innerText = `Players won ${summaryPlayer.pointsWonDefense /
-  summaryPlayer.pointsPlayedDefense}% of the games they played on defense.`;
+  'offenseWon'
+).innerText = `In 2018, teams won ${summaryPlayer.pointsWonOffense /
+  summaryPlayer.pointsPlayedOffense}% of the games they played on offense.`;
+  
 document.getElementById(
-  'defenseLost'
-).innerText = `Players lost ${summaryPlayer.pointsLostDefense /
+  'defenseWon'
+).innerText = `in 2018, teams won ${summaryPlayer.pointsWonDefense /
   summaryPlayer.pointsPlayedDefense}% of the games they played on defense.`;
 
-document.getElementById(
-  'offenseWon'
-).innerText = `Players won ${summaryPlayer.pointsWonOffense /
-  summaryPlayer.pointsPlayedOffense}% of the games they played on offense.`;
-document.getElementById(
-  'offenseLost'
-).innerText = `Players lost ${summaryPlayer.pointsLostOffense /
-  summaryPlayer.pointsPlayedOffense}% of the games they played on offense.`;
 
 // Generate Calculated Team Statistics
 let teamsArray = [];
