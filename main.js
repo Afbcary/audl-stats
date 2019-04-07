@@ -1,6 +1,6 @@
 var sk = require('./node_modules/statkit/statkit.js');
 
-// TODO: 
+// TODO:
 // draw linear reg lines to max x value
 // title team bar graphs
 // calculate team linear regressions
@@ -19,7 +19,7 @@ for (teamName of teamNames) {
   option.innerHTML = teamName;
   teamSelect.appendChild(option);
 
-  teams[teamName] = { name: teamName };
+  teams[teamName] = { name: teamName, players: [] };
   for (accumulatableStat of accumulatableStats) {
     teams[teamName][accumulatableStat] = 0;
   }
@@ -46,6 +46,7 @@ individualStats
         : 0;
 
     players.push(player);
+    teams[player.teamName].players.push(player);
 
     for (accumulatableStat of accumulatableStats) {
       summaryPlayer[accumulatableStat] += player[accumulatableStat];
@@ -53,20 +54,46 @@ individualStats
     }
   });
 
-players = players.sort((p1, p2) =>
-  p1.pointsPlayed > p2.pointsPlayed ? 1 : -1
-);
+for (teamName of teamNames) {
+  const offensiveTeamLinear = calculateLinearRegression(
+    generateScatterData(
+      teams[teamName].players,
+      'pointsPlayedOffense',
+      'offensiveEfficiency'
+    )
+  );
+  const oTeamIntercept = offensiveTeamLinear[0];
+  const oTeamSlope = offensiveTeamLinear[1];
+  const defensiveTeamLinear = calculateLinearRegression(
+    generateScatterData(
+      teams[teamName].players,
+      'pointsPlayedDefense',
+      'defensiveEfficiency'
+    )
+  );
+  const dTeamIntercept = defensiveTeamLinear[0];
+  const dTeamSlope = defensiveTeamLinear[1];
+}
 
+const averageOffenseEfficiency = (
+  (summaryPlayer.pointsWonOffense / summaryPlayer.pointsPlayedOffense) *
+  100
+)
+  .toString()
+  .substring(0, 5);
 document.getElementById(
   'offenseWon'
-).innerText = `In 2018, teams won ${summaryPlayer.pointsWonOffense /
-  summaryPlayer.pointsPlayedOffense}% of the games they played on offense.`;
-  
+).innerText = `Teams, on average, won ${averageOffenseEfficiency}% of their offensive points.`;
+
+const averageDefensiveEfficiency = (
+  (summaryPlayer.pointsWonDefense / summaryPlayer.pointsPlayedDefense) *
+  100
+)
+  .toString()
+  .substring(0, 5);
 document.getElementById(
   'defenseWon'
-).innerText = `in 2018, teams won ${summaryPlayer.pointsWonDefense /
-  summaryPlayer.pointsPlayedDefense}% of the games they played on defense.`;
-
+).innerText = `Teams, on average, won ${averageDefensiveEfficiency}% of their defensive points.`;
 
 // Generate Calculated Team Statistics
 let teamsArray = [];
@@ -227,21 +254,21 @@ function generateScatterData(unorderedData, xStat, yStat) {
   const scatterData = [];
   for (point of unorderedData) {
     if (point[xStat] > 0) {
-      scatterData.push({ x: point[xStat], y: point[yStat] });
+      scatterData.push({ x: point[xStat], y: point[yStat], name: point.name });
     }
   }
   return scatterData;
 }
 
-function generateLinePts(scatterData) {
+function generateLinePts(scatterData, maxX) {
   const linearRegression = calculateLinearRegression(scatterData);
   const intercept = linearRegression[0];
   const slope = linearRegression[1];
-  const efficiencyAt300 = intercept + slope * 300;
-  const linePts = [{ x: 0, y: intercept }, { x: 300, y: efficiencyAt300 }];
-  if (efficiencyAt300 > 1) {
+  const efficiencyAtMax = intercept + slope * maxX;
+  const linePts = [{ x: 0, y: intercept }, { x: maxX, y: efficiencyAtMax }];
+  if (efficiencyAtMax > 1) {
     linePts[1] = { x: (1 - intercept) / slope, y: 1 };
-  } else if (efficiencyAt300 < 0) {
+  } else if (efficiencyAtMax < 0) {
     linePts[1] = { x: (0 - intercept) / slope, y: 0 };
   }
   return linePts;
@@ -252,10 +279,20 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
 
   const scatterData = generateScatterData(unorderedData, xStat, yStat);
 
-  const linePts = generateLinePts(scatterData);
+  let maxX = 300;
+  for (point of unorderedData) {
+    if (point[xStat] > maxX) {
+      maxX = Math.ceil(point[xStat] / 50) * 50;
+    }
+  }
+  const linePts = generateLinePts(scatterData, maxX);
+
+  const labels = scatterData.map(p => p.name);
+  // labels.unshift('line-end');
+  // labels.unshift('line-intercept');
 
   var chartData = {
-    labels: unorderedData.map(p => p.name),
+    labels: labels,
     datasets: [
       {
         label: 'Players',
@@ -264,13 +301,15 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
         pointRadius: 5,
         data: scatterData,
         showLine: false
-      },
+      }
+      ,
       {
-        type: 'scatter',
+        type: 'line',
         label: 'Linear Regression Line',
         data: linePts,
         fill: false,
         showLine: true,
+        backgroundColor: 'hsl(150, 100%, 50%)',
         borderColor: 'hsl(150, 100%, 50%)'
       }
     ]
@@ -303,10 +342,14 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
       ]
     },
     tooltips: {
+      intersect: false,
       callbacks: {
-        title: function(tooltipItems, data) { 
+        title: function(tooltipItems, data) {
+          if (tooltipItems[0].index < 2) {
+            return "";
+          }
           return data.labels[tooltipItems[0].index];
-         },
+        },
         label: function(tooltipItem, data) {
           return `(${tooltipItem.xLabel}, ${tooltipItem.yLabel})`;
         }
