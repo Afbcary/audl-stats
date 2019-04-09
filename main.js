@@ -1,11 +1,11 @@
-var sk = require('./node_modules/statkit/statkit.js');
+var ss = require('spm-simple-statistics');
 
 // TODO:
-// draw linear reg lines to max x value
-// title team bar graphs
-// calculate team linear regressions
-// calculate player standard deviations
-// graph best player standard deviations on O and D
+// reduce EoP graphs to best players on O and D
+// remove linear regression lines for EoP
+// Write up article
+// host of github pages
+
 module.exports = generateForTeam;
 
 // Add team options to select
@@ -55,24 +55,28 @@ individualStats
   });
 
 for (teamName of teamNames) {
-  const offensiveTeamLinear = calculateLinearRegression(
+  teams[teamName].lrEquationOffense = calculateLinearRegression(
     generateScatterData(
       teams[teamName].players,
       'pointsPlayedOffense',
       'offensiveEfficiency'
     )
   );
-  const oTeamIntercept = offensiveTeamLinear[0];
-  const oTeamSlope = offensiveTeamLinear[1];
-  const defensiveTeamLinear = calculateLinearRegression(
+
+  teams[teamName].lrEquationDefense = calculateLinearRegression(
     generateScatterData(
       teams[teamName].players,
       'pointsPlayedDefense',
       'defensiveEfficiency'
     )
   );
-  const dTeamIntercept = defensiveTeamLinear[0];
-  const dTeamSlope = defensiveTeamLinear[1];
+}
+
+for (player of players){
+  player.errorOfPredictionOffense = player.offensiveEfficiency - teams[player.teamName].lrEquationOffense(player.pointsPlayedOffense) ;
+
+  player.errorOfPredictionDefense = player.defensiveEfficiency - teams[player.teamName].lrEquationDefense(player.pointsPlayedDefense) ;
+  // console.log(`${player.name} had O error of ${player.errorOfPredictionOffense} and D error of ${player.errorOfPredictionDefense}`);
 }
 
 const averageOffenseEfficiency = (
@@ -137,6 +141,38 @@ generateBarGraph(
 
 let teamPlayersOffensiveEfficiencyChart;
 let teamPlayersDefensiveEfficiencyChart;
+
+// Error of prediction charts
+let allPlayersOffensiveErrorOfPredictionChart;
+let allPlayersDefensiveErrorOfPredictionChart;
+
+const allPlayersOffensiveErrorOfPrediction = players
+    .filter(p => p.pointsPlayedOffense > 50)
+    .sort((p1, p2) =>
+      p1.errorOfPredictionOffense > p2.errorOfPredictionOffense ? 1 : -1
+    );
+
+allPlayersOffensiveErrorOfPredictionChart = generateScatterChart(
+  'allPlayersOffensiveErrorOfPrediction',
+  `2018 Players Offensive Error of Prediction`,
+  allPlayersOffensiveErrorOfPrediction,
+  'pointsPlayedOffense',
+  'errorOfPredictionOffense'
+);
+
+const allPlayersDefensiveErrorOfPrediction = players
+    .filter(p => p.pointsPlayedDefense > 50)
+    .sort((p1, p2) =>
+      p1.errorOfPredictionDefense > p2.errorOfPredictionDefense ? 1 : -1
+    );
+
+allPlayersDefensiveErrorOfPredictionChart = generateScatterChart(
+  'allPlayersDefensiveErrorOfPrediction',
+  `2018 Players Defensive Error of Prediction`,
+  allPlayersDefensiveErrorOfPrediction,
+  'pointsPlayedDefense',
+  'errorOfPredictionDefense'
+);
 
 // playerDefensiveEfficiencyByTeam
 function generatePlayerDefensiveEfficienciesForTeam(selectedTeamName) {
@@ -261,17 +297,8 @@ function generateScatterData(unorderedData, xStat, yStat) {
 }
 
 function generateLinePts(scatterData, maxX) {
-  const linearRegression = calculateLinearRegression(scatterData);
-  const intercept = linearRegression[0];
-  const slope = linearRegression[1];
-  const efficiencyAtMax = intercept + slope * maxX;
-  const linePts = [{ x: 0, y: intercept }, { x: maxX, y: efficiencyAtMax }];
-  if (efficiencyAtMax > 1) {
-    linePts[1] = { x: (1 - intercept) / slope, y: 1 };
-  } else if (efficiencyAtMax < 0) {
-    linePts[1] = { x: (0 - intercept) / slope, y: 0 };
-  }
-  return linePts;
+  const lineEquation = calculateLinearRegression(scatterData);
+  return [{ x: 0, y: lineEquation(0) }, { x: maxX, y: lineEquation(maxX) }];
 }
 
 function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
@@ -279,7 +306,7 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
 
   const scatterData = generateScatterData(unorderedData, xStat, yStat);
 
-  let maxX = 300;
+  let maxX = 0;
   for (point of unorderedData) {
     if (point[xStat] > maxX) {
       maxX = Math.ceil(point[xStat] / 50) * 50;
@@ -288,8 +315,6 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
   const linePts = generateLinePts(scatterData, maxX);
 
   const labels = scatterData.map(p => p.name);
-  // labels.unshift('line-end');
-  // labels.unshift('line-intercept');
 
   var chartData = {
     labels: labels,
@@ -301,8 +326,7 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
         pointRadius: 5,
         data: scatterData,
         showLine: false
-      }
-      ,
+      },
       {
         type: 'line',
         label: 'Linear Regression Line',
@@ -346,7 +370,7 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
       callbacks: {
         title: function(tooltipItems, data) {
           if (tooltipItems[0].index < 2) {
-            return "";
+            return '';
           }
           return data.labels[tooltipItems[0].index];
         },
@@ -366,13 +390,16 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
 }
 
 function calculateLinearRegression(scatterData) {
-  var x = scatterData.map(d => d.x);
-  var y = scatterData.map(d => d.y);
-
-  var A = new Array(x.length * 2);
-  for (var i = 0; i < x.length; ++i) {
-    A[2 * i] = 1;
-    A[2 * i + 1] = x[i];
+  const regressionData = [];
+  for (point of scatterData) {
+    regressionData.push([point.x, point.y]);
   }
-  return sk.lstsq(x.length, 2, A, y);
+  
+  var line = ss.linear_regression()
+    .data(regressionData)
+    .line();
+
+  // Get the r-squared value of the line estimation
+  // ss.r_squared(regressionData, line);
+  return line;
 }

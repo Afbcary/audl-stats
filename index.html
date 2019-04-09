@@ -19,6 +19,12 @@
       <canvas id="teamDefensiveEfficiency"></canvas>
     </div>
 
+    <div class="chart-container">
+      <canvas id="allPlayersOffensiveErrorOfPrediction"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="allPlayersDefensiveErrorOfPrediction"></canvas>
+    </div>
     <select id="teamSelect" onchange="generateForTeam(this.value)"> </select>
     <label>Select a Team</label>
     <div class="chart-container">
@@ -34,7 +40,6 @@
     <script type="text/javascript" src="TeamNames.js"></script>
     <script src="./node_modules/@material/select/dist/mdc.select.min.js"></script>
     <script src="./node_modules/chart.js/dist/Chart.min.js"></script>
-    <!-- <script src="./node_modules/statkit/statkit.js"></script> -->
     <script src="bundle.js" type="text/javascript"></script>
   </body>
 </html>
