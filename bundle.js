@@ -73,11 +73,14 @@ for (teamName of teamNames) {
   );
 }
 
-for (player of players){
-  player.errorOfPredictionOffense = player.offensiveEfficiency - teams[player.teamName].lrEquationOffense(player.pointsPlayedOffense) ;
+for (player of players) {
+  player.errorOfPredictionOffense =
+    player.offensiveEfficiency -
+    teams[player.teamName].lrEquationOffense(player.pointsPlayedOffense);
 
-  player.errorOfPredictionDefense = player.defensiveEfficiency - teams[player.teamName].lrEquationDefense(player.pointsPlayedDefense) ;
-  // console.log(`${player.name} had O error of ${player.errorOfPredictionOffense} and D error of ${player.errorOfPredictionDefense}`);
+  player.errorOfPredictionDefense =
+    player.defensiveEfficiency -
+    teams[player.teamName].lrEquationDefense(player.pointsPlayedDefense);
 }
 
 const averageOffenseEfficiency = (
@@ -97,7 +100,7 @@ const averageDefensiveEfficiency = (
 )
   .toString()
   .substring(0, 5);
-  
+
 document.getElementById(
   'defenseWon'
 ).innerText = `League-wide, teams, on average, won ${averageDefensiveEfficiency}% of their defensive points.`;
@@ -150,10 +153,10 @@ let allPlayersOffensiveErrorOfPredictionChart;
 let allPlayersDefensiveErrorOfPredictionChart;
 
 const allPlayersOffensiveErrorOfPrediction = players
-    .filter(p => p.errorOfPredictionOffense > 0)
-    .sort((p1, p2) =>
-      p1.errorOfPredictionOffense > p2.errorOfPredictionOffense ? 1 : -1
-    );
+  .filter(p => p.errorOfPredictionOffense > 0)
+  .sort((p1, p2) =>
+    p1.errorOfPredictionOffense > p2.errorOfPredictionOffense ? 1 : -1
+  );
 
 allPlayersOffensiveErrorOfPredictionChart = generateScatterChart(
   'allPlayersOffensiveErrorOfPrediction',
@@ -166,8 +169,8 @@ allPlayersOffensiveErrorOfPredictionChart = generateScatterChart(
 const allPlayersDefensiveErrorOfPrediction = players
   .filter(p => p.errorOfPredictionDefense > 0)
   .sort((p1, p2) =>
-      p1.errorOfPredictionDefense > p2.errorOfPredictionDefense ? 1 : -1
-    );
+    p1.errorOfPredictionDefense > p2.errorOfPredictionDefense ? 1 : -1
+  );
 
 allPlayersDefensiveErrorOfPredictionChart = generateScatterChart(
   'allPlayersDefensiveErrorOfPrediction',
@@ -293,14 +296,34 @@ function generateScatterData(unorderedData, xStat, yStat) {
   const scatterData = [];
   for (point of unorderedData) {
     if (point[xStat] > 0) {
-      scatterData.push({ x: point[xStat], y: point[yStat], name: point.name, teamName: point.teamName });
+      scatterData.push({
+        x: point[xStat],
+        y: point[yStat],
+        name: point.name,
+        teamName: point.teamName
+      });
     }
   }
   return scatterData;
 }
 
-function generateLinePts(scatterData, maxX) {
+function generateLinePts(scatterData, maxX, canvasName) {
   const lineEquation = calculateLinearRegression(scatterData);
+  const slope = ((lineEquation(1) - lineEquation(0)) * 1000)
+    .toString()
+    .substring(0, 5);
+  const intercept = lineEquation(0)
+    .toString()
+    .substring(0, 5);
+
+    document.getElementById(
+      `${canvasName}-linear-slope`
+      ).innerText = slope;
+      
+    document.getElementById(
+      `${canvasName}-linear-intercept`
+    ).innerText = intercept;
+
   return [{ x: 0, y: lineEquation(0) }, { x: maxX, y: lineEquation(maxX) }];
 }
 
@@ -372,7 +395,13 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
   return scatterChart;
 }
 
-function generateScatterChartWithLine(canvasName, title, unorderedData, xStat, yStat) {
+function generateScatterChartWithLine(
+  canvasName,
+  title,
+  unorderedData,
+  xStat,
+  yStat
+) {
   var ctx = document.getElementById(canvasName).getContext('2d');
 
   const scatterData = generateScatterData(unorderedData, xStat, yStat);
@@ -383,7 +412,7 @@ function generateScatterChartWithLine(canvasName, title, unorderedData, xStat, y
       maxX = Math.ceil(point[xStat] / 50) * 50;
     }
   }
-  const linePts = generateLinePts(scatterData, maxX);
+  const linePts = generateLinePts(scatterData, maxX, canvasName);
 
   const labels = scatterData.map(p => p.name);
 
@@ -465,8 +494,9 @@ function calculateLinearRegression(scatterData) {
   for (point of scatterData) {
     regressionData.push([point.x, point.y]);
   }
-  
-  var line = ss.linear_regression()
+
+  var line = ss
+    .linear_regression()
     .data(regressionData)
     .line();
 

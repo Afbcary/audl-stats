@@ -11,16 +11,26 @@
 
   <body>
     <p>
-      I enjoyed reading Dan Fiorino's <a href="https://ultiworld.com/2019/03/29/predicting-audls-breakout-stars-stats/">article</a> but couldn't help feeling some of the
-      same criticisms that he leveled against himself. Defense is equally as
-      important as offense. Defensive players should be celebrated for their
-      successes too. An all-encompassing stat should be very carefully tuned and
-      weighted. Even then, there are intangables that people won't ever record
-      on a stat-sheet. In the end the only thing that matters is that your team
-      wins as many points as possible. Three caveats: 1. If those points aren't
-      equally distributed among games, you can still lose games. 2. Your play in
-      one point can affect how your team does in another point. 3. Some points
-      are played against much stiffer competition than others. Lucky for me Dan made the data <a href="https://github.com/dfiorino/audl-pull">publically available</a>.
+      I enjoyed reading Dan Fiorino's
+      <a
+        href="https://ultiworld.com/2019/03/29/predicting-audls-breakout-stars-stats/"
+        >article</a
+      >
+      but couldn't help feeling some of the same criticisms that he leveled
+      against himself. Defense is equally as important as offense. Defensive
+      players should be celebrated for their successes too. An all-encompassing
+      stat should be very carefully tuned and weighted. Even then, there are
+      intangables that people won't ever record on a stat-sheet. In the end the
+      only thing that matters is that your team wins as many points as possible.
+      Lucky for me Dan made the data
+      <a href="https://github.com/dfiorino/audl-pull">publically available</a>.
+      This analysis aims to highlight a different subset of players - the players
+      that quietly do all the little things right and grind for every point.
+      Two caveats: 
+      <ol> 
+      <li>Each point is played against a different opponent skill level.</li>
+      <li>A player's performance in one point can affect the outcome of ensuing points.</li>
+      </ol>
     </p>
     <p>
       To capture how effective teams and players are on offense and defense I
@@ -46,8 +56,8 @@
       <canvas id="teamDefensiveEfficiency"></canvas>
     </div>
     <p>
-      No suprise that the championship winning Radicals had stellar offense and
-      defense on their championship run. It is suprising that the rush missed
+      No suprise that the Madison Radicals had stellar offense and
+      defense on their championship run. It <em>is</em> suprising that the Toronto Rush missed
       championship weekend entirely. In the west, the Cascades, Spiders, and
       Flamethrowers could only be carried so far by their offensive talent. The
       NY Empire, DC Breeze, and Growlers relied on their defense to break for
@@ -58,17 +68,42 @@
       that team.
     </p>
     <select id="teamSelect" onchange="generateForTeam(this.value)"> </select>
-    <label>Select a Team</label>
+    <label> --- <b>Select a Team</b></label>
+    <br>
+    <p  class="sameline"> 
+      (Predicted Offensive Efficiency) =<div id="playerOffensiveEfficiencyAndPointsPlayedByTeam-linear-slope" class="sameline">slope</div> * 10 <sup>-4</sup> (Points Played on Offense) + <div id="playerOffensiveEfficiencyAndPointsPlayedByTeam-linear-intercept" class="sameline">intercept</div>
+    </p>
     <div class="chart-container">
       <canvas id="playerOffensiveEfficiencyAndPointsPlayedByTeam"></canvas>
     </div>
+    <br>
+    <p  class="sameline"> 
+      (Predicted Defensive Efficiency) =<div id="playerDefensiveEfficiencyAndPointsPlayedByTeam-linear-slope" class="sameline">slope</div> * 10 <sup>-4</sup> (Points Played on Defense) + <div id="playerDefensiveEfficiencyAndPointsPlayedByTeam-linear-intercept" class="sameline">intercept</div>
+      </p>
     <div class="chart-container">
       <canvas id="playerDefensiveEfficiencyAndPointsPlayedByTeam"></canvas>
     </div>
-    <p>In general, the more points a player tallied on offense, the poorer their play. On defense however, the team stalwarts performed better than the journeymen. This goes against the common sense that you must play a lot of offensive points to get chemistry with teammates and have a smooth flow. Also on defense I would have guessed the players who play most would get tired and less effective.</p>
-    <p>It's easier to play good defense when you're emersed in a strong system led by a visionary coach and surrounded by experienced, bought-in teammates. On the fledgling teams in the AUDL, players must find their own way, and the stand-outs should be all the more celebrated. Compared to the team linear regression, the following players had positive error's of prediction.</p>
+    <p>
+      In general, the more points a player tallied on offense, the poorer their
+      play. On defense however, the team stalwarts performed better than the
+      journeymen. This goes against the common sense that you must play a lot of
+      offensive points to get chemistry with teammates and have a smooth flow.
+      Also on defense I would have guessed the players who play most would get
+      tired and less effective. Teams with large positive slopes for their offensive / defensive linear regressions would likely benefit from playing their stars even more frequently. Those with negative slopes might win more by giving others more chances.
+    </p>
+    <p>
+      It's easier to play good defense when you're emersed in a strong system
+      led by a visionary coach and surrounded by experienced, bought-in
+      teammates. On the fledgling teams in the AUDL, players must find their own
+      way, and the stand-outs should be all the more celebrated. Compared to the
+      team linear regression, the following players had positive error's of
+      prediction.
+    </p>
     <ul>
-      <li>Error of Prediction = (Actual Efficiency) - (Predicted efficiency of a player on their team who played as many points as they did)</li>
+      <li>
+        Error of Prediction = (Actual Efficiency) - (Predicted efficiency of a
+        player on their team who played as many points as they did)
+      </li>
     </ul>
     <p>Note: Sample size is ever-important.</p>
     <div class="chart-container">
@@ -77,7 +112,7 @@
     <div class="chart-container">
       <canvas id="allPlayersDefensiveErrorOfPrediction"></canvas>
     </div>
-    <p>Thanks for reading! I welcome feedback at afbcary@gmail.com</p>
+    <p>Thanks for reading! I welcome feedback at <a href="mailto:afbcary@gmail.com">afbcary@gmail.com</a>.</p>
 
     <script type="text/javascript" src="IndividualStats.js"></script>
     <script type="text/javascript" src="AccumulatableStats.js"></script>
