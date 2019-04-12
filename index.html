@@ -3,14 +3,41 @@
   <head>
     <meta charset="utf-8" />
 
-    <title>AUDL Stats</title>
-    <meta name="description" content="audl stats" />
-    <meta name="author" content="acary" />
+    <title>Statistical Aberrations In the AUDL</title>
+    <meta name="description" content="Statistical Aberrations In the AUDL" />
+    <meta name="author" content="Austin Cary" />
     <link rel="stylesheet" type="text/css" href="audl.css" />
   </head>
 
   <body>
+    <p>
+      I enjoyed reading Dan Fiorino's <a href="https://ultiworld.com/2019/03/29/predicting-audls-breakout-stars-stats/">article</a> but couldn't help feeling some of the
+      same criticisms that he leveled against himself. Defense is equally as
+      important as offense. Defensive players should be celebrated for their
+      successes too. An all-encompassing stat should be very carefully tuned and
+      weighted. Even then, there are intangables that people won't ever record
+      on a stat-sheet. In the end the only thing that matters is that your team
+      wins as many points as possible. Three caveats: 1. If those points aren't
+      equally distributed among games, you can still lose games. 2. Your play in
+      one point can affect how your team does in another point. 3. Some points
+      are played against much stiffer competition than others. Lucky for me Dan made the data <a href="https://github.com/dfiorino/audl-pull">publically available</a>.
+    </p>
+    <p>
+      To capture how effective teams and players are on offense and defense I
+      calculated:
+    </p>
+    <ul>
+      <li>
+        Offensive Efficiency = (Points Won on Offense) / (Points Played on
+        Offense)
+      </li>
+      <li>
+        Defensive Efficiency = (Points Won on Defense) / (Points Played on
+        Defense)
+      </li>
+    </ul>
     <div id="offenseWon"></div>
+    <p>Here's how the teams ranked in 2018.</p>
     <div class="chart-container">
       <canvas id="teamOffensiveEfficiency"></canvas>
     </div>
@@ -18,13 +45,18 @@
     <div class="chart-container">
       <canvas id="teamDefensiveEfficiency"></canvas>
     </div>
-
-    <div class="chart-container">
-      <canvas id="allPlayersOffensiveErrorOfPrediction"></canvas>
-    </div>
-    <div class="chart-container">
-      <canvas id="allPlayersDefensiveErrorOfPrediction"></canvas>
-    </div>
+    <p>
+      No suprise that the championship winning Radicals had stellar offense and
+      defense on their championship run. It is suprising that the rush missed
+      championship weekend entirely. In the west, the Cascades, Spiders, and
+      Flamethrowers could only be carried so far by their offensive talent. The
+      NY Empire, DC Breeze, and Growlers relied on their defense to break for
+      the win.
+    </p>
+    <p>
+      Select a team below to see the efficencies of the individual players on
+      that team.
+    </p>
     <select id="teamSelect" onchange="generateForTeam(this.value)"> </select>
     <label>Select a Team</label>
     <div class="chart-container">
@@ -33,6 +65,19 @@
     <div class="chart-container">
       <canvas id="playerDefensiveEfficiencyAndPointsPlayedByTeam"></canvas>
     </div>
+    <p>In general, the more points a player tallied on offense, the poorer their play. On defense however, the team stalwarts performed better than the journeymen. This goes against the common sense that you must play a lot of offensive points to get chemistry with teammates and have a smooth flow. Also on defense I would have guessed the players who play most would get tired and less effective.</p>
+    <p>It's easier to play good defense when you're emersed in a strong system led by a visionary coach and surrounded by experienced, bought-in teammates. On the fledgling teams in the AUDL, players must find their own way, and the stand-outs should be all the more celebrated. Compared to the team linear regression, the following players had positive error's of prediction.</p>
+    <ul>
+      <li>Error of Prediction = (Actual Efficiency) - (Predicted efficiency of a player on their team who played as many points as they did)</li>
+    </ul>
+    <p>Note: Sample size is ever-important.</p>
+    <div class="chart-container">
+      <canvas id="allPlayersOffensiveErrorOfPrediction"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="allPlayersDefensiveErrorOfPrediction"></canvas>
+    </div>
+    <p>Thanks for reading! I welcome feedback at afbcary@gmail.com</p>
 
     <script type="text/javascript" src="IndividualStats.js"></script>
     <script type="text/javascript" src="AccumulatableStats.js"></script>

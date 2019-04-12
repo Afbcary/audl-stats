@@ -85,9 +85,10 @@ const averageOffenseEfficiency = (
 )
   .toString()
   .substring(0, 5);
+
 document.getElementById(
   'offenseWon'
-).innerText = `Teams, on average, won ${averageOffenseEfficiency}% of their offensive points.`;
+).innerText = `League-wide, teams, on average, won ${averageOffenseEfficiency}% of their offensive points.`;
 
 const averageDefensiveEfficiency = (
   (summaryPlayer.pointsWonDefense / summaryPlayer.pointsPlayedDefense) *
@@ -95,9 +96,10 @@ const averageDefensiveEfficiency = (
 )
   .toString()
   .substring(0, 5);
+  
 document.getElementById(
   'defenseWon'
-).innerText = `Teams, on average, won ${averageDefensiveEfficiency}% of their defensive points.`;
+).innerText = `League-wide, teams, on average, won ${averageDefensiveEfficiency}% of their defensive points.`;
 
 // Generate Calculated Team Statistics
 let teamsArray = [];
@@ -147,7 +149,7 @@ let allPlayersOffensiveErrorOfPredictionChart;
 let allPlayersDefensiveErrorOfPredictionChart;
 
 const allPlayersOffensiveErrorOfPrediction = players
-    .filter(p => p.pointsPlayedOffense > 50)
+    .filter(p => p.errorOfPredictionOffense > 0)
     .sort((p1, p2) =>
       p1.errorOfPredictionOffense > p2.errorOfPredictionOffense ? 1 : -1
     );
@@ -161,8 +163,8 @@ allPlayersOffensiveErrorOfPredictionChart = generateScatterChart(
 );
 
 const allPlayersDefensiveErrorOfPrediction = players
-    .filter(p => p.pointsPlayedDefense > 50)
-    .sort((p1, p2) =>
+  .filter(p => p.errorOfPredictionDefense > 0)
+  .sort((p1, p2) =>
       p1.errorOfPredictionDefense > p2.errorOfPredictionDefense ? 1 : -1
     );
 
@@ -186,7 +188,7 @@ function generatePlayerDefensiveEfficienciesForTeam(selectedTeamName) {
       p1.defensiveEfficiency > p2.defensiveEfficiency ? 1 : -1
     );
 
-  teamPlayersDefensiveEfficiencyChart = generateScatterChart(
+  teamPlayersDefensiveEfficiencyChart = generateScatterChartWithLine(
     'playerDefensiveEfficiencyAndPointsPlayedByTeam',
     `2018 ${selectedTeamName} Defensive Efficiency and Points Played`,
     teamPlayersDefensiveEfficiency,
@@ -206,7 +208,7 @@ function generatePlayerOffensiveEfficienciesForTeam(selectedTeamName) {
       p1.offensiveEfficiency > p2.offensiveEfficiency ? 1 : -1
     );
 
-  teamPlayersOffensiveEfficiencyChart = generateScatterChart(
+  teamPlayersOffensiveEfficiencyChart = generateScatterChartWithLine(
     'playerOffensiveEfficiencyAndPointsPlayedByTeam',
     `2018 ${selectedTeamName} Offensive Efficiency and Points Played`,
     teamPlayersOffensiveEfficiency,
@@ -290,7 +292,7 @@ function generateScatterData(unorderedData, xStat, yStat) {
   const scatterData = [];
   for (point of unorderedData) {
     if (point[xStat] > 0) {
-      scatterData.push({ x: point[xStat], y: point[yStat], name: point.name });
+      scatterData.push({ x: point[xStat], y: point[yStat], name: point.name, teamName: point.teamName });
     }
   }
   return scatterData;
@@ -302,6 +304,74 @@ function generateLinePts(scatterData, maxX) {
 }
 
 function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
+  var ctx = document.getElementById(canvasName).getContext('2d');
+
+  const scatterData = generateScatterData(unorderedData, xStat, yStat);
+
+  const labels = scatterData.map(p => `${p.name} (${p.teamName})`);
+
+  var chartData = {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Players',
+        type: 'scatter',
+        backgroundColor: 'hsl(244, 100%, 50%)',
+        pointRadius: 5,
+        data: scatterData,
+        showLine: false
+      }
+    ]
+  };
+
+  const options = {
+    title: { display: true, text: title },
+    scales: {
+      xAxes: [
+        {
+          type: 'linear',
+          position: 'bottom',
+          scaleLabel: {
+            display: true,
+            labelString: 'Points Played'
+          }
+        }
+      ],
+      yAxes: [
+        {
+          ticks: {
+            suggestedMin: 0,
+            suggestedMax: 1
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Efficiency'
+          }
+        }
+      ]
+    },
+    tooltips: {
+      intersect: false,
+      callbacks: {
+        title: function(tooltipItems, data) {
+          return data.labels[tooltipItems[0].index];
+        },
+        label: function(tooltipItem, data) {
+          return `(${tooltipItem.xLabel}, ${tooltipItem.yLabel})`;
+        }
+      }
+    }
+  };
+
+  var scatterChart = new Chart(ctx, {
+    type: 'scatter',
+    data: chartData,
+    options: options
+  });
+  return scatterChart;
+}
+
+function generateScatterChartWithLine(canvasName, title, unorderedData, xStat, yStat) {
   var ctx = document.getElementById(canvasName).getContext('2d');
 
   const scatterData = generateScatterData(unorderedData, xStat, yStat);
