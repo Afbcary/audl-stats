@@ -42,6 +42,12 @@ p {
   }
 }
 
+@media handheld {
+  .chart-container {
+    margin-bottom: -20vh;
+  }
+}
+
 canvas:after {
   content: "";
   display: block;
