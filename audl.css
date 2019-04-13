@@ -21,35 +21,35 @@ p {
   margin-top: 5vh;
 }
 
-@media  (max-width: 1600px) {
+@media (max-width: 1600px) {
   .chart-container {
     margin-bottom: 30vh;
   }
 }
-@media  (max-width: 1200px) {
+@media (max-width: 1200px) {
   .chart-container {
     margin-bottom: 20vh;
   }
 }
-@media  (max-width: 1000px) {
+@media (max-width: 1000px) {
   .chart-container {
     margin-bottom: 10vh;
   }
 }
-@media  (max-width: 800px) {
+@media (max-width: 800px) {
   .chart-container {
     margin-bottom: 0vh;
   }
 }
 
-@media handheld {
+@media only screen and (max-device-width: 480px) {
   .chart-container {
     margin-bottom: -20vh;
   }
 }
 
 canvas:after {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   right: -2rem;
