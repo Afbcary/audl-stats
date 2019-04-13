@@ -59,12 +59,11 @@ p {
   }
 }
 
-@media only screen and (max-device-width: 445px) {
+/* @media only screen and (max-device-width: 445px) {
   .chart-container {
     margin-bottom: -20vh;
   }
-}
-
+} */
 
 canvas:after {
   content: '';
