@@ -21,24 +21,36 @@ p {
   margin-top: 5vh;
 }
 
-@media (max-width: 1600px) {
+@media only screen and (max-device-width: 1600px) {
   .chart-container {
     margin-bottom: 30vh;
   }
 }
-@media (max-width: 1200px) {
+@media only screen and (max-device-width: 1200px) {
   .chart-container {
     margin-bottom: 20vh;
   }
 }
-@media (max-width: 1000px) {
+@media only screen and (max-device-width: 1000px) {
   .chart-container {
     margin-bottom: 10vh;
   }
 }
-@media (max-width: 800px) {
+@media only screen and (max-device-width: 800px) {
   .chart-container {
     margin-bottom: 0vh;
+  }
+}
+
+@media only screen and (max-device-width: 660px) {
+  .chart-container {
+    margin-bottom: -12vh;
+  }
+}
+
+@media only screen and (max-device-width: 540px) {
+  .chart-container {
+    margin-bottom: -15vh;
   }
 }
 
@@ -47,6 +59,7 @@ p {
     margin-bottom: -20vh;
   }
 }
+
 
 canvas:after {
   content: '';
