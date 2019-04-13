@@ -66,7 +66,7 @@
     </p>
     <p>
       Select a team below to see the efficencies of the individual players on
-      that team.
+      that team who played 10 or more points.
     </p>
     <label><b>Select a Team</b></label>
     <select id="teamSelect" onchange="generateForTeam(this.value)"> </select>
@@ -106,14 +106,14 @@
         player on their team who played as many points as they did)
       </li>
     </ul>
-    <p>Note: Sample size is ever-important.</p>
+    <p>Note: Sample size is key.</p>
     <div class="chart-container">
       <canvas id="allPlayersOffensiveErrorOfPrediction"></canvas>
     </div>
     <div class="chart-container">
       <canvas id="allPlayersDefensiveErrorOfPrediction"></canvas>
     </div>
-    <p>Thanks for reading! I welcome feedback at <a href="mailto:afbcary@gmail.com">afbcary@gmail.com</a>.</p>
+    <p>Thanks for reading! I welcome feedback at <a href="mailto:afbcary@gmail.com">afbcary@gmail.com</a>. The code that generated this article is open source at <a href="https://github.com/afbcary/audl-stats">https://github.com/afbcary/audl-stats</a>. Help me find a better stat than error of prediction for the last two graphs (<a href="https://en.wikipedia.org/wiki/Cook%27s_distance">Cook's distance</a> or <a href="https://en.wikipedia.org/wiki/Leverage_(statistics)">leverage</a>?).  </p>
 
     <script type="text/javascript" src="IndividualStats.js"></script>
     <script type="text/javascript" src="AccumulatableStats.js"></script>

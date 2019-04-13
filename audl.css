@@ -41,11 +41,6 @@ p {
     margin-bottom: 0vh;
   }
 }
-/* @media  (max-width: 600px) {
-  .chart-container {
-    margin-bottom: 0vh;
-  }
-} */
 
 canvas:after {
   content: "";

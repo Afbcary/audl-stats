@@ -1,11 +1,5 @@
 var ss = require('spm-simple-statistics');
 
-// TODO:
-// reduce EoP graphs to best players on O and D
-// remove linear regression lines for EoP
-// Write up article
-// host of github pages
-
 module.exports = generateForTeam;
 
 // Add team options to select
@@ -34,6 +28,7 @@ let players = [];
 
 individualStats
   .filter(r => r.year === 'AUDL 2018')
+  .filter(r => r.name.length > 5)
   .forEach(r => {
     const player = new Object(r);
     player.defensiveEfficiency =
@@ -86,8 +81,7 @@ const averageOffenseEfficiency = (
   (summaryPlayer.pointsWonOffense / summaryPlayer.pointsPlayedOffense) *
   100
 )
-  .toString()
-  .substring(0, 5);
+  .toFixed(4);
 
 document.getElementById(
   'offenseWon'
@@ -97,8 +91,7 @@ const averageDefensiveEfficiency = (
   (summaryPlayer.pointsWonDefense / summaryPlayer.pointsPlayedDefense) *
   100
 )
-  .toString()
-  .substring(0, 5);
+.toFixed(4);
 
 document.getElementById(
   'defenseWon'
@@ -313,11 +306,9 @@ function generateScatterData(unorderedData, xStat, yStat) {
 function generateLinePts(scatterData, maxX, canvasName) {
   const lineEquation = calculateLinearRegression(scatterData);
   const slope = ((lineEquation(1) - lineEquation(0)) * 1000)
-    .toString()
-    .substring(0, 5);
+  .toFixed(4);
   const intercept = lineEquation(0)
-    .toString()
-    .substring(0, 5);
+  .toFixed(4);
 
     document.getElementById(
       `${canvasName}-linear-slope`
@@ -372,7 +363,7 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
           },
           scaleLabel: {
             display: true,
-            labelString: 'Extra Efficiency'
+            labelString: 'Team Surpassing Efficiency'
           }
         }
       ]
@@ -398,6 +389,7 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
   return scatterChart;
 }
 
+
 function generateScatterChartWithLine(
   canvasName,
   title,
@@ -407,7 +399,7 @@ function generateScatterChartWithLine(
 ) {
   var ctx = document.getElementById(canvasName).getContext('2d');
 
-  const scatterData = generateScatterData(unorderedData, xStat, yStat);
+  const scatterData = generateScatterData(unorderedData, xStat, yStat).filter(d => d.x > 10);
 
   let maxX = 0;
   for (point of unorderedData) {
@@ -472,7 +464,7 @@ function generateScatterChartWithLine(
       intersect: false,
       callbacks: {
         title: function(tooltipItems, data) {
-          if (tooltipItems[0].index < 2) {
+          if (tooltipItems[0].datasetIndex === 1) {
             return '';
           }
           return data.labels[tooltipItems[0].index];

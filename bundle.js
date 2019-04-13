@@ -1,12 +1,6 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.generateForTeam = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 var ss = require('spm-simple-statistics');
 
-// TODO:
-// reduce EoP graphs to best players on O and D
-// remove linear regression lines for EoP
-// Write up article
-// host of github pages
-
 module.exports = generateForTeam;
 
 // Add team options to select
@@ -35,6 +29,7 @@ let players = [];
 
 individualStats
   .filter(r => r.year === 'AUDL 2018')
+  .filter(r => r.name.length > 5)
   .forEach(r => {
     const player = new Object(r);
     player.defensiveEfficiency =
@@ -87,8 +82,7 @@ const averageOffenseEfficiency = (
   (summaryPlayer.pointsWonOffense / summaryPlayer.pointsPlayedOffense) *
   100
 )
-  .toString()
-  .substring(0, 5);
+  .toFixed(4);
 
 document.getElementById(
   'offenseWon'
@@ -98,8 +92,7 @@ const averageDefensiveEfficiency = (
   (summaryPlayer.pointsWonDefense / summaryPlayer.pointsPlayedDefense) *
   100
 )
-  .toString()
-  .substring(0, 5);
+.toFixed(4);
 
 document.getElementById(
   'defenseWon'
@@ -314,11 +307,9 @@ function generateScatterData(unorderedData, xStat, yStat) {
 function generateLinePts(scatterData, maxX, canvasName) {
   const lineEquation = calculateLinearRegression(scatterData);
   const slope = ((lineEquation(1) - lineEquation(0)) * 1000)
-    .toString()
-    .substring(0, 5);
+  .toFixed(4);
   const intercept = lineEquation(0)
-    .toString()
-    .substring(0, 5);
+  .toFixed(4);
 
     document.getElementById(
       `${canvasName}-linear-slope`
@@ -373,7 +364,7 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
           },
           scaleLabel: {
             display: true,
-            labelString: 'Extra Efficiency'
+            labelString: 'Team Surpassing Efficiency'
           }
         }
       ]
@@ -399,6 +390,7 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
   return scatterChart;
 }
 
+
 function generateScatterChartWithLine(
   canvasName,
   title,
@@ -408,7 +400,7 @@ function generateScatterChartWithLine(
 ) {
   var ctx = document.getElementById(canvasName).getContext('2d');
 
-  const scatterData = generateScatterData(unorderedData, xStat, yStat);
+  const scatterData = generateScatterData(unorderedData, xStat, yStat).filter(d => d.x > 10);
 
   let maxX = 0;
   for (point of unorderedData) {
@@ -473,7 +465,7 @@ function generateScatterChartWithLine(
       intersect: false,
       callbacks: {
         title: function(tooltipItems, data) {
-          if (tooltipItems[0].index < 2) {
+          if (tooltipItems[0].datasetIndex === 1) {
             return '';
           }
           return data.labels[tooltipItems[0].index];
