@@ -91,7 +91,7 @@ const averageOffenseEfficiency = (
 
 document.getElementById(
   'offenseWon'
-).innerText = `League-wide, teams, on average, won ${averageOffenseEfficiency}% of their offensive points.`;
+).innerText = `League-wide, teams won ${averageOffenseEfficiency}% of their offensive points.`;
 
 const averageDefensiveEfficiency = (
   (summaryPlayer.pointsWonDefense / summaryPlayer.pointsPlayedDefense) *
@@ -102,7 +102,7 @@ const averageDefensiveEfficiency = (
 
 document.getElementById(
   'defenseWon'
-).innerText = `League-wide, teams, on average, won ${averageDefensiveEfficiency}% of their defensive points.`;
+).innerText = `League-wide, teams won ${averageDefensiveEfficiency}% of their defensive points.`;
 
 // Generate Calculated Team Statistics
 let teamsArray = [];
@@ -282,6 +282,10 @@ function generateBarGraph(
           {
             ticks: {
               beginAtZero: true
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Efficiency'
             }
           }
         ]
@@ -368,7 +372,7 @@ function generateScatterChart(canvasName, title, unorderedData, xStat, yStat) {
           },
           scaleLabel: {
             display: true,
-            labelString: 'Efficiency'
+            labelString: 'Extra Efficiency'
           }
         }
       ]

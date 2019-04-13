@@ -3,13 +3,15 @@
   <head>
     <meta charset="utf-8" />
 
-    <title>Statistical Aberrations In the AUDL</title>
-    <meta name="description" content="Statistical Aberrations In the AUDL" />
+    <title>The Ultimate Metric</title>
+    <meta name="description" content="The Ultimate Metric" />
     <meta name="author" content="Austin Cary" />
     <link rel="stylesheet" type="text/css" href="audl.css" />
   </head>
 
   <body>
+    <h1>The Ultimate Metric - 2018 AUDL</h1>
+    <span>by Austin Cary</span>
     <p>
       I enjoyed reading Dan Fiorino's
       <a
@@ -46,12 +48,11 @@
         Defense)
       </li>
     </ul>
-    <div id="offenseWon"></div>
-    <p>Here's how the teams ranked in 2018.</p>
+    <p id="offenseWon"></p>
     <div class="chart-container">
       <canvas id="teamOffensiveEfficiency"></canvas>
     </div>
-    <div id="defenseWon"></div>
+    <p id="defenseWon"></p>
     <div class="chart-container">
       <canvas id="teamDefensiveEfficiency"></canvas>
     </div>
@@ -67,19 +68,19 @@
       Select a team below to see the efficencies of the individual players on
       that team.
     </p>
+    <label><b>Select a Team</b></label>
     <select id="teamSelect" onchange="generateForTeam(this.value)"> </select>
-    <label> --- <b>Select a Team</b></label>
     <br>
-    <p  class="sameline"> 
-      (Predicted Offensive Efficiency) =<div id="playerOffensiveEfficiencyAndPointsPlayedByTeam-linear-slope" class="sameline">slope</div> * 10 <sup>-4</sup> (Points Played on Offense) + <div id="playerOffensiveEfficiencyAndPointsPlayedByTeam-linear-intercept" class="sameline">intercept</div>
-    </p>
+    <span  class="sameline"> 
+      (Predicted Offensive Efficiency) = <span id="playerOffensiveEfficiencyAndPointsPlayedByTeam-linear-slope">slope</span> * 10 <sup>-4</sup> (Points Played on Offense) + <span id="playerOffensiveEfficiencyAndPointsPlayedByTeam-linear-intercept" class="sameline">intercept</span>
+    </span>
     <div class="chart-container">
       <canvas id="playerOffensiveEfficiencyAndPointsPlayedByTeam"></canvas>
     </div>
     <br>
-    <p  class="sameline"> 
-      (Predicted Defensive Efficiency) =<div id="playerDefensiveEfficiencyAndPointsPlayedByTeam-linear-slope" class="sameline">slope</div> * 10 <sup>-4</sup> (Points Played on Defense) + <div id="playerDefensiveEfficiencyAndPointsPlayedByTeam-linear-intercept" class="sameline">intercept</div>
-      </p>
+    <span class="sameline"> 
+      (Predicted Defensive Efficiency) = <span id="playerDefensiveEfficiencyAndPointsPlayedByTeam-linear-slope">slope</span> * 10 <sup>-4</sup> (Points Played on Defense) + <span id="playerDefensiveEfficiencyAndPointsPlayedByTeam-linear-intercept" class="sameline">intercept</span>
+      </span>
     <div class="chart-container">
       <canvas id="playerDefensiveEfficiencyAndPointsPlayedByTeam"></canvas>
     </div>
@@ -89,8 +90,8 @@
       journeymen. This goes against the common sense that you must play a lot of
       offensive points to get chemistry with teammates and have a smooth flow.
       Also on defense I would have guessed the players who play most would get
-      tired and less effective. Teams with large positive slopes for their offensive / defensive linear regressions would likely benefit from playing their stars even more frequently. Those with negative slopes might win more by giving others more chances.
-    </p>
+      tired and less effective.</p>
+    <p>Teams with large positive slopes for their offensive / defensive linear regressions would likely benefit from playing their stars even more frequently. Those with negative slopes might advance by giving less-known players additional touches.</p>
     <p>
       It's easier to play good defense when you're emersed in a strong system
       led by a visionary coach and surrounded by experienced, bought-in
