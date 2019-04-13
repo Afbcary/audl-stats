@@ -41,19 +41,19 @@ p {
     margin-bottom: 10vh;
   }
 }
-@media only screen and (max-device-width: 830px) {
+@media only screen and (max-device-width: 800px) {
   .chart-container {
     margin-bottom: 0vh;
   }
 }
 
-@media only screen and (max-device-width: 625px) {
+@media only screen and (max-device-width: 600px) {
   .chart-container {
     margin-bottom: -12vh;
   }
 }
 
-@media only screen and (max-device-width: 540px) {
+@media only screen and (max-device-width: 500px) {
   .chart-container {
     margin-bottom: -15vh;
   }
