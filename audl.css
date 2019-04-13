@@ -21,9 +21,14 @@ p {
   margin-top: 5vh;
 }
 
-@media only screen and (max-device-width: 1600px) {
+@media only screen and (max-device-width: 1500px) {
   .chart-container {
     margin-bottom: 30vh;
+  }
+}
+@media only screen and (max-device-width: 1400px) {
+  .chart-container {
+    margin-bottom: 25vh;
   }
 }
 @media only screen and (max-device-width: 1200px) {
@@ -31,18 +36,18 @@ p {
     margin-bottom: 20vh;
   }
 }
-@media only screen and (max-device-width: 1000px) {
+@media only screen and (max-device-width: 1050px) {
   .chart-container {
     margin-bottom: 10vh;
   }
 }
-@media only screen and (max-device-width: 800px) {
+@media only screen and (max-device-width: 830px) {
   .chart-container {
     margin-bottom: 0vh;
   }
 }
 
-@media only screen and (max-device-width: 660px) {
+@media only screen and (max-device-width: 625px) {
   .chart-container {
     margin-bottom: -12vh;
   }
@@ -54,7 +59,7 @@ p {
   }
 }
 
-@media only screen and (max-device-width: 480px) {
+@media only screen and (max-device-width: 445px) {
   .chart-container {
     margin-bottom: -20vh;
   }
