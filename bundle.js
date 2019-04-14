@@ -5,6 +5,11 @@ module.exports = generateForTeam;
 
 // Add team options to select
 const teamSelect = document.getElementById('teamSelect');
+const defaultOption = document.createElement('option');
+defaultOption.value = "";
+defaultOption.innerHTML = "";
+defaultOption.selected = true;
+  teamSelect.appendChild(defaultOption);
 
 // Create Team Summary Objects
 const teams = {};
@@ -283,6 +288,17 @@ function generateBarGraph(
             }
           }
         ]
+      },
+      tooltips: {
+        intersect: false,
+        callbacks: {
+          title: function(tooltipItems, data) {
+            return data.labels[tooltipItems[0].index];
+          },
+          label: function(tooltipItem, data) {
+            return `${tooltipItem.yLabel.toFixed(3)}`;
+          }
+        }
       }
     }
   });
