@@ -6,7 +6,7 @@
   "dependencies": {
     "@material/select": "^1.1.0",
     "browserify": "^16.2.3",
-    "chart.js": "^2.8.0",
+    "chart.js": "^2.9.4",
     "spm-simple-statistics": "^0.9.0"
   },
   "scripts": {
